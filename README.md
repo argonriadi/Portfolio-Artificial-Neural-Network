@@ -1,100 +1,66 @@
 # Portfolio
-Customer churn modeling
+SQL Query
 
-_Milestones ini dibuat guna mengevaluasi pembelajaran pada Hacktiv8 Data Science Full Time Program Phase 2 khususnya pada Artificial Neural Network._
-
----
-
-## Assignment Objectives
-
-*Milestones 1* ini dibuat guna mengevaluasi Pembelajaran Phase 2 :
-
-- Mampu memahami konsep Artificial Neural Network.
-- Mampu mempersiapkan data untuk digunakan dalam model Artificial Neural Network.
-- Mampu mengimplementasikan Artificial Neural Network dengan data yang diberikan.
-- Mampu menganalisis dan menjelaskan layer yang dibuat.
-
----
-
-## Problems
-
-Sebuah perusahaan ingin meminimalisir resiko seorang customer untuk berhenti memakai produk yang mereka tawarkan. Bantulah perusahaan tersebut untuk memprediksi customer yang akan berhenti (churn) dari dataset yang diberikan. 
-
-*Dataset terlampir pada repository*
+_Graded Challenge ini dibuat guna mengevaluasi pembelajaran pada Hacktiv8 Data Science Fulltime Program khususnya pada Business Knowledge & SQL Query._
 
 ---
 
 ## Dataset Description
 
-Dataset name : `churn.csv`
+* Pada graded challenge ini, data diakses menggunakan `bigquery-public-data` pada Google Cloud Big Query.
+* Buka [Google Cloud Platform](https://console.cloud.google.com/), masuk ke BigQuery, lalu buka tab `bigquery-public-data` atau klik link [berikut](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=samples&page=dataset&_ga=2.245085957.1471931019.1642739417-486643658.1638156099).
+**WAJIB GUNAKAN GOOGLE COLAB**
 
-| Column | Description |
-| --- | --- |
-| `user_id` | ID of a customer |
-| `age` | Age of a customer |
-| `gender` | Gender of a customer |
-| `region_category` | Region that a customer belongs to |
-| `membership_category` | Category of the membership that a customer is using |
-| `joining_date` | Date when a customer became a member |
-| `joined_through referral` | Whether a customer joined using any referral code or ID |
-| `preferred_offer types` | Type of offer that a customer prefers |
-| `medium_of operation` | Medium of operation that a customer uses for transactions |
-| `internet_option` | Type of internet service a customer uses |
-| `last_visit_time` | The last time a customer visited the website |
-| `days_since_last_login` | Number of days since a customer last logged into the website |
-| `avg_time_spent` | Average time spent by a customer on the website |
-| `avg_transaction_value` | Average transaction value of a customer |
-| `avg_frequency_login_days` | Number of times a customer has logged in to the website |
-| `points_in_wallet` | Points awarded to a customer on each transaction |
-| `used_special_discount` | Whether a customer uses special discounts offered |
-| `offer_application_preference` | Whether a customer prefers offers |
-| `past_complaint` | Whether a customer has raised any complaints |
-| `complaint_status` | Whether the complaints raised by a customer was resolved |
-| `feedback` | Feedback provided by a customer |
-| `churn_risk_score` | Churn score <br><br> `0` : Not churn <br> `1` : Churn |
+```{attention}
+Perhatikan petunjuk penggunaan dataset!
+```
 
----
+1. Gunakan database `thelook_ecommerce`.
+2. Koneksikan `BigQuery` kamu ke Google Colab tempat kamu mengerjakan P0-GC3 dengan code berikut:
 
-## Assignment Instructions
+```
+from google.colab import auth
+auth.authenticate_user()
+print('Authenticated')
 
-*Milestones 1* dikerjakan dalam format *notebook* dan *model deployment* dengan beberapa *kriteria wajib* di bawah ini:
+project_id = "rock-wonder-317907" #GUNAKAN GCP PROJECT-ID KALIAN MASING-MASING
+client = bigquery.Client(project=project_id)
+```
+3. Untuk melakukan Query menggunakan skema ini, kamu dapat menggunakan method `client.query('Masukkan Querynya').to_dataframe()`. Outputnya akan berupa Pandas dataframe, sehingga harus import Pandas. Contoh:
+```
+df = client.query('''
+SELECT extract(year from created_at) as year, extract(month from created_at) as month, count(order_id) as sales
+FROM `bigquery-public-data.thelook_ecommerce.orders`
+WHERE status='Shipped' and created_at<"2022-07-01"
+GROUP BY year,month
+ORDER BY year,month ASC
+''').to_dataframe()
+```
 
-1. Deep Learning framework yang digunakan adalah *TensorFlow*.
 
-2. Ada penggunaan library visualisasi, seperti *matplotlib*, *seaborn*, atau yang lain.
+## Assignment Problems
 
-3. Isi *notebook* harus mengikuti *outline* di bawah ini:
-   1. Perkenalan
-      > Bab pengenalan harus diisi dengan identitas, gambaran besar dataset yang digunakan, dan *objective* yang ingin dicapai.
-   
-   2. Import Libraries
-      > *Cell* pertama pada *notebook* **harus berisi dan hanya berisi** semua *library* yang digunakan dalam *project*.
-   
-   3. Data Loading
-      > Bagian ini berisi proses penyiapan data sebelum dilakukan eksplorasi data lebih lanjut. Proses Data Loading dapat berupa memberi nama baru untuk setiap kolom, mengecek ukuran dataset, dll.
-   
-   4. Exploratory Data Analysis (EDA)
-      > Bagian ini berisi explorasi data pada dataset diatas dengan menggunakan query, grouping, visualisasi sederhana, dan lain sebagainya.
+Kamu adalah seorang data analis di The Look yang merupakan salah satu platform e-commerce terbesar di planet Mars. Kamu diminta untuk membuat laporan evaluasi aktivitas penjualan di platform tersebut.
 
-   5. Feature Engineering
-      > Bagian ini berisi proses penyiapan data untuk proses pelatihan model, seperti pembagian data menjadi train-val-test, transformasi data (normalisasi, encoding, dll.), dan proses-proses lain yang dibutuhkan.   
-   
-   6. Model Definition
-      > Bagian ini berisi cell untuk mendefinisikan model. Jelaskan alasan menggunakan suatu algoritma/model, hyperparameter yang dipakai, jenis penggunaan metrics yang dipakai, dan hal lain yang terkait dengan model.
+Untuk mempermudah pekerjaan kamu supaya terarah, kamu harus menentukan problem statement dengan success criteria berdasarkan SMART. Namun tantangannya, kamu tentukan problem statement berdasarkan penjabaran-penjabaran analisis dalam bentuk persoalan yang harus kamu jawab menggunakan Query SQL. (SMART akan berdasarkan dari poin-poin penjabaran).
 
-   7. Model Training
-      > Cell pada bagian ini hanya berisi code untuk melatih model dan output yang dihasilkan. Lakukan beberapa kali proses training dengan hyperparameter yang berbeda untuk melihat hasil yang didapatkan. Analisis dan narasikan hasil ini pada bagian Model Evaluation.
-   
-   8. Model Evaluation
-      > Pada bagian ini, dilakukan evaluasi model yang harus menunjukkan bagaimana performa model berdasarkan metrics yang dipilih. Hal ini harus dibuktikan dengan visualisasi tren performa dan/atau tingkat kesalahan model. **Lakukan analisis terkait dengan hasil pada model dan tuliskan hasil analisisnya**.
+***Catatan:*** *Tidak perlu membuat plot/visualisasi data. Cukup tampilkan dataframe!*
 
-   9. Model Saving
-      > Pada bagian ini, dilakukan proses penyimpanan model dan file-file lain yang terkait dengan hasil proses pembuatan model. Pilihlah 1 arsitektur ANN yang terbaik berdasarkan hasil evaluasi sebelumnya.
-   
-   10. Model Inference
-       > Model yang sudah dilatih akan dicoba pada data yang bukan termasuk ke dalam train-set, val-set, ataupun test-set. Data ini harus dalam format yang asli, bukan data yang sudah di-scaled.
-   
-   11. Pengambilan Kesimpulan
-       > Pada bagian terakhir ini, **harus berisi** kesimpulan yang mencerminkan hasil yang didapat dengan *objective* yang sudah ditulis di bagian pengenalan.
+**Poin penjabaran:**
 
----
+1. Berapa jumlah transaksi yang berstatus `Complete` tiap bulan selama Q1 sampai Q3 di tahun 2022? Insight apa yang bisa kamu berikan?
+2. Berikan informasi total penjualan (dalam USD) tiap bulan selama Q1 sampai Q3 di tahun 2022! (Hanya yang transaksi berstatus `Complete`. Apa informasi yang bisa kamu sampaikan?
+3. Berapa user yang melakukan transaksi berstatus `Complete` di tiap bulan dari Q1 sampai Q3 2022? Apa kesimpulanmu?
+4. Kategori produk apa saja yang paling banyak dibeli (staus transaksi: `Complete`) di tiap bulannya selama Q1 sampai Q3 tahun 2022? Berikan insight!
+5. Kategori produk apa saja yang paling banyak mendapatkan pendapatan (staus transaksi: `Complete`) di tiap bulannya selama Q1 sampai Q3 tahun 2022? Berikan insight!
+6. Dibandingkan dengan jumlah transaksi dan total penjualan, mana yang paling berkaitan dengan jumlah user yang melakukan transaksi? Apa analisis yang dapat kamu jelaskan? (_Hint: Kamu bisa menggunakan korelasi_)
+
+**PERHATIAN!**. Untuk semua penjabaran tidak boleh menggunakan bantuan Pandas Query atau method lainnya untuk menyeleksi, menggabungkan, memanipulasi data. HANYA gunakan Query SQL. Tidak perlu menampilkan grafik, hanya berupa dataframe.
+
+**POIN ANALISIS**
+1. Berikan kesimpulan dari laporan/informasi yang dibuat berdasarkan problem statement/poin penjabaran menggunakan bahasa awam! (boleh dalam beberapa paragraf)
+
+**POIN PERTANYAAN**
+1. Apakah problem statement yang kamu definisikan di awal dapat terukur ketercapaiannya? berikan pendapatmu!
+2. Berdasarkan hasil analisis yang sudah kamu lakukan dari 6 penjabaran di atas, jika CEO perusahaanmu ingin menargetkan pendapatan di awal kuartal 4 harus mencapai $250000, apakah masuk akal?
+3. CEO kamu menargetkan di kuartal 4 ada investor yang dapat menyuntikan dana ke perusahaanmu, dimana investor akan melihat GMV selama 3 kuartal terakhir serta prospek kedepan minimal di kuartal 4 akan seperti apa. Berikan informasi kepada CEO mu berdasarkan trend transaksi, jumlah user yang bertransaksi, dan GMV 3 kuartal terakhir, apakah perusahaanmu layak atau tidak mendapatkan investor baru!
