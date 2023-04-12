@@ -1,4 +1,4 @@
-# Portfolio-Artificial-Neural-Network
+# Portfolio
 Customer churn modeling
 
 _Milestones ini dibuat guna mengevaluasi pembelajaran pada Hacktiv8 Data Science Full Time Program Phase 2 khususnya pada Artificial Neural Network._
