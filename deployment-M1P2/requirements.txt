@@ -1,0 +1,6 @@
+﻿pandas
+Numpy
+joblib
+scikit-learn==1.2.2
+tensorflow==2.12.0
+feature_engine == 1.6.0
